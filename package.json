@@ -14,7 +14,7 @@
         "lint:fix": "eslint src/**/*.ts --fix",
         "prepublishOnly": "npm version patch",
         "preversion": "npm run test",
-        "version": "npm run tsc && git add -A dist",
+        "version": "npm run tsc && git add -A dist-package",
         "postversion": "git push"
     },
     "repository": {
