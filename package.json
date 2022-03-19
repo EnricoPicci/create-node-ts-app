@@ -1,0 +1,40 @@
+{
+    "name": "create-node-ts-app",
+    "version": "1.0.0",
+    "description": "Creates a node app which uses Typescript",
+    "main": "index.js",
+    "bin": {
+        "create-node-ts-app": "./dist/cmd/create-node-ts-app.jsnpm"
+    },
+    "scripts": {
+        "test": "mocha -r ts-node/register src/**/*.spec.ts src/**/**/*.spec.ts",
+        "tsc": "tsc",
+        "tsc-version": "tsc --version",
+        "lint": "eslint src/**/*.ts",
+        "lint:fix": "eslint src/**/*.ts --fix",
+        "prepublishOnly": "npm version patch",
+        "preversion": "npm run test",
+        "version": "npm run tsc && git add -A dist",
+        "postversion": "git push"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/EnricoPicci/create-node-ts-app.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/EnricoPicci/create-node-ts-app/issues"
+    },
+    "homepage": "https://github.com/EnricoPicci/create-node-ts-app#readme",
+    "devDependencies": {
+        "@types/chai": "^4.3.0",
+        "@types/mocha": "^9.1.0",
+        "@types/node": "^17.0.21",
+        "chai": "^4.3.6",
+        "mocha": "^9.2.2",
+        "ts-node": "^10.7.0",
+        "typescript": "^4.6.2"
+    }
+}
