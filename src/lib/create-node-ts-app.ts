@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import { realpathSync } from 'fs';
 
 function createNodeTsApp() {
