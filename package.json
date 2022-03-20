@@ -1,5 +1,5 @@
 {
-    "name": "@picci/create-node-ts-app",
+    "name": "@enrico.piccinin/create-node-ts-app",
     "version": "1.0.2",
     "description": "Creates a node app which uses Typescript",
     "main": "index.js",
