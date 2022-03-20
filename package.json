@@ -1,10 +1,10 @@
 {
     "name": "@enrico.piccinin/create-node-ts-app",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "Creates a node app which uses Typescript",
     "main": "index.js",
     "bin": {
-        "create-node-ts-app": "./dist/lib/create-node-ts-app.js"
+        "create-node-ts-app": "./dist-package/lib/create-node-ts-app.js"
     },
     "scripts": {
         "test": "mocha -r ts-node/register src/**/*.spec.ts src/**/**/*.spec.ts",
@@ -14,7 +14,7 @@
         "lint:fix": "eslint src/**/*.ts --fix",
         "prepublishOnly": "npm version patch",
         "preversion": "npm run test",
-        "version": "npm run tsc && git add -A dist",
+        "version": "npm run tsc && git add -A dist-package",
         "postversion": "git push"
     },
     "repository": {
