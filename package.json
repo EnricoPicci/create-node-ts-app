@@ -4,7 +4,7 @@
     "description": "Creates a node app which uses Typescript",
     "main": "index.js",
     "bin": {
-        "create-node-ts-app": "./dist-package/cmd/create-node-ts-app.jsnpm"
+        "create-node-ts-app": "./dist-package/lib/create-node-ts-app.js"
     },
     "scripts": {
         "test": "mocha -r ts-node/register src/**/*.spec.ts src/**/**/*.spec.ts",
