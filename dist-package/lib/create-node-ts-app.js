@@ -1,11 +1,5 @@
 #!/usr/bin/env node
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const fs_1 = require("fs");
-function createNodeTsApp() {
-    console.log('Current folder', __dirname);
-    const executePath = (0, fs_1.realpathSync)(process.argv[1]);
-    console.log('executePath', executePath);
-    console.log('cwd', process.cwd());
-}
-createNodeTsApp();
+const create_node_ts_app_1 = require("../internals/create-node-ts-app");
+(0, create_node_ts_app_1.createNodeTsApp)();

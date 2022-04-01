@@ -1,8 +1,8 @@
-import { execSync } from 'child_process';
-import { parse, format } from 'path';
+import { realpathSync } from 'fs';
 
-export function createNodeTsApp(folder: string) {
-    const folderPath = parse(folder);
-
-    execSync(`bash create-project.sh ${format(folderPath)}`);
+export function createNodeTsApp() {
+    console.log('Current folder', __dirname);
+    const executePath = realpathSync(process.argv[1]);
+    console.log('executePath', executePath);
+    console.log('cwd', process.cwd());
 }
