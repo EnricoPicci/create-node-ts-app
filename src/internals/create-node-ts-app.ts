@@ -15,7 +15,7 @@ export function createNodeTsApp(appName: string, template = DefaultTemplate) {
     const templatePath = realpathSync(__dirname + `/../../templates/${template}`);
 
     if (appName.trim() === '') {
-        throw new Error('Folder name is empty');
+        throw new Error('App name is empty');
     }
     if (!existsSync(templatePath)) {
         throw new Error(`Template ${template} does not exist`);
@@ -27,9 +27,6 @@ export function createNodeTsApp(appName: string, template = DefaultTemplate) {
 
     // copy the files from the template folder
     cpSync(`${templatePath}`, `./`, { recursive: true });
-
-    // create the src folder
-    mkdirSync(`src`);
 
     // run the commands
     getCommands(template).forEach((command) => {
