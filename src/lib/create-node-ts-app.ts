@@ -2,4 +2,4 @@
 
 import { createNodeTsApp } from '../internals/create-node-ts-app';
 
-createNodeTsApp();
+createNodeTsApp('tempApp');

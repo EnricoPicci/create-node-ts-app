@@ -18,6 +18,7 @@ cp $startDir/tsconfig.eslint.json tsconfig.eslint.json
 
 # npm i @types/node @types/mocha @types/chai --save-dev
 
-# npx tsc --init
+# no since we copy tsconfig.json from the template
+# NO NO NO npx tsc --init
 
 # git init
