@@ -8,4 +8,4 @@ Requires Node version > v16.7.0
 
 ## command
 
-npx @enrico.piccinin/create-node-ts-app
+npx --yes @enrico.piccinin/create-node-ts-app <appname>

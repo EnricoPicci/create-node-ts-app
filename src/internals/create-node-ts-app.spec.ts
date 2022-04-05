@@ -22,7 +22,9 @@ describe(`createNodeTsApp`, () => {
         });
 
         // check that the name in package.json has been set correctly
-        expect(getPackageJson('package.json').name).equal(appNameLowerCase);
+        const packageJson = getPackageJson('package.json');
+        expect(packageJson.name).equal(appNameLowerCase);
+        expect(Object.keys(packageJson.devDependencies).length).greaterThan(0);
 
         deleteTempDir(tempDir);
     }).timeout(60000);

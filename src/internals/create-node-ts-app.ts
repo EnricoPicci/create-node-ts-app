@@ -2,11 +2,19 @@ import { execSync } from 'child_process';
 import { cpSync, existsSync, mkdirSync, readFileSync, realpathSync, writeFileSync } from 'fs';
 
 export const DefaultTemplate = 'default';
+export const Templates: { [key: string]: { commands: string[] } } = {};
+Templates[DefaultTemplate] = {
+    commands: [
+        'npm i typescript ts-node mocha chai --save-dev',
+        'npm i @types/node @types/mocha @types/chai --save-dev',
+        'git init',
+    ],
+};
 
-export function createNodeTsApp(folder: string, template = DefaultTemplate) {
+export function createNodeTsApp(appName: string, template = DefaultTemplate) {
     const templatePath = realpathSync(__dirname + `/../../templates/${template}`);
 
-    if (folder.trim() === '') {
+    if (appName.trim() === '') {
         throw new Error('Folder name is empty');
     }
     if (!existsSync(templatePath)) {
@@ -14,8 +22,8 @@ export function createNodeTsApp(folder: string, template = DefaultTemplate) {
     }
 
     // create the app folder
-    mkdirSync(folder);
-    process.chdir(folder);
+    mkdirSync(appName);
+    process.chdir(appName);
 
     // copy the files from the template folder
     cpSync(`${templatePath}`, `./`, { recursive: true });
@@ -31,22 +39,13 @@ export function createNodeTsApp(folder: string, template = DefaultTemplate) {
     // change package.json
     const packageJsonPath = `package.json`;
     const packageJson = getPackageJson(packageJsonPath);
-    packageJson.name = folder.toLowerCase();
+    packageJson.name = appName.toLowerCase();
     const newPackageJsonString = JSON.stringify(packageJson, null, 2);
     writeFileSync(packageJsonPath, newPackageJsonString);
 }
 
 function getCommands(template: string) {
-    const commands = [];
-    switch (template) {
-        case 'default':
-            commands.push('npm i typescript ts-node mocha chai --save-dev');
-            commands.push('npm i @types/node @types/mocha @types/chai --save-dev');
-            commands.push('git init');
-            break;
-        default:
-            throw new Error(`Unknown template: ${template}`);
-    }
+    const commands = Templates[template].commands || [];
     return commands;
 }
 

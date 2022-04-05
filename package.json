@@ -16,7 +16,7 @@
         "preversion": "npm run test",
         "version": "npm run tsc && git add -A dist-package",
         "postversion": "git push",
-        "run-local": "npm run tsc && node dist-package/lib/create-node-ts-app.js"
+        "run-local": "npm run tsc && node dist-package/lib/create-node-ts-app.js --appName newApp"
     },
     "repository": {
         "type": "git",
