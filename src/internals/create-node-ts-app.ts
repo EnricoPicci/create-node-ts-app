@@ -1,5 +1,6 @@
 import { execSync } from 'child_process';
-import { cpSync, existsSync, mkdirSync, readFileSync, realpathSync, writeFileSync } from 'fs';
+import { cpSync, existsSync, mkdirSync, realpathSync } from 'fs';
+import { writeIntoPackageJson } from './json-manipulation/merge';
 import { DefaultTemplateName, Templates } from './templates';
 
 export function createNodeTsApp(appName: string, template = DefaultTemplateName) {
@@ -25,19 +26,11 @@ export function createNodeTsApp(appName: string, template = DefaultTemplateName)
     });
 
     // change package.json
-    const packageJsonPath = `package.json`;
-    const packageJson = getPackageJson(packageJsonPath);
-    packageJson.name = appName.toLowerCase();
-    const newPackageJsonString = JSON.stringify(packageJson, null, 2);
-    writeFileSync(packageJsonPath, newPackageJsonString);
+    const nameJson = { name: appName.toLowerCase() };
+    writeIntoPackageJson(nameJson);
 }
 
 function getCommands(template: string) {
     const commands = Templates[template].commands || [];
     return commands;
-}
-
-export function getPackageJson(pacakgeJson: string) {
-    const packageJsonString = readFileSync(pacakgeJson).toString();
-    return JSON.parse(packageJsonString);
 }

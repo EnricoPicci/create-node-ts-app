@@ -3,7 +3,8 @@ import { mkdtempSync, readdirSync, rmSync, statSync } from 'fs';
 import { tmpdir } from 'os';
 import { sep } from 'path';
 
-import { createNodeTsApp, getPackageJson } from './create-node-ts-app';
+import { createNodeTsApp } from './create-node-ts-app';
+import { getPackageJson } from './json-manipulation/merge';
 import { DefaultTemplateName } from './templates';
 
 describe(`createNodeTsApp`, () => {
