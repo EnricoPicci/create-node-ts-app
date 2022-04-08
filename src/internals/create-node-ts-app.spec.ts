@@ -3,7 +3,8 @@ import { mkdtempSync, readdirSync, rmSync, statSync } from 'fs';
 import { tmpdir } from 'os';
 import { sep } from 'path';
 
-import { createNodeTsApp, DefaultTemplate, getPackageJson } from './create-node-ts-app';
+import { createNodeTsApp, getPackageJson } from './create-node-ts-app';
+import { DefaultTemplateName } from './templates';
 
 describe(`createNodeTsApp`, () => {
     it(`should create the app folder and copy the files from the default template`, () => {
@@ -14,7 +15,7 @@ describe(`createNodeTsApp`, () => {
         createNodeTsApp(appName);
 
         // check that all files have been copied from the template folder
-        const templateFiles = getFiles(`${__dirname}/../../templates/${DefaultTemplate}`);
+        const templateFiles = getFiles(`${__dirname}/../../templates/${DefaultTemplateName}`);
         const nodeTsAppFiles = getFiles(`${tempDir}/${appName}`);
         templateFiles.forEach((file) => {
             // some more files have been created by commands like "git init" and so we can not check a one-to-one match

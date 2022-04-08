@@ -1,17 +1,8 @@
 import { execSync } from 'child_process';
 import { cpSync, existsSync, mkdirSync, readFileSync, realpathSync, writeFileSync } from 'fs';
+import { DefaultTemplateName, Templates } from './templates';
 
-export const DefaultTemplate = 'default';
-export const Templates: { [key: string]: { commands: string[] } } = {};
-Templates[DefaultTemplate] = {
-    commands: [
-        'npm i typescript ts-node mocha chai --save-dev',
-        'npm i @types/node @types/mocha @types/chai --save-dev',
-        'git init',
-    ],
-};
-
-export function createNodeTsApp(appName: string, template = DefaultTemplate) {
+export function createNodeTsApp(appName: string, template = DefaultTemplateName) {
     const templatePath = realpathSync(__dirname + `/../../templates/${template}`);
 
     if (appName.trim() === '') {
