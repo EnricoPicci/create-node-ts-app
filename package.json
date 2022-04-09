@@ -31,6 +31,7 @@
     "homepage": "https://github.com/EnricoPicci/create-node-ts-app#readme",
     "devDependencies": {
         "@types/chai": "^4.3.0",
+        "@types/jsonminify": "^0.4.1",
         "@types/mocha": "^9.1.0",
         "@types/node": "^17.0.21",
         "chai": "^4.3.6",
@@ -39,6 +40,7 @@
         "typescript": "^4.6.2"
     },
     "dependencies": {
-        "commander": "^9.1.0"
+        "commander": "^9.1.0",
+        "jsonminify": "^0.4.2"
     }
 }
