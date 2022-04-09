@@ -1,20 +1,17 @@
 import { execSync } from 'child_process';
 import { cpSync, existsSync, mkdirSync, realpathSync } from 'fs';
 import { writeIntoPackageJson } from './json-manipulation/package-json';
-import { DefaultTemplateName, Templates } from './templates';
+import { DefaultTemplateName, getTemplate, Template } from './templates';
 
-export function createNodeTsApp(appName: string, template = DefaultTemplateName) {
+export function createNodeTsApp(appName: string, templateName = DefaultTemplateName) {
     if (appName.trim() === '') {
         throw new Error('App name is empty');
     }
 
-    const folderPaths = Templates[template].folders.map((folder) => {
-        const folderPath = realpathSync(`${__dirname}/../../templates/${folder}`);
-        if (!existsSync(folderPath)) {
-            throw new Error(`Folder ${folder} does not exist`);
-        }
-        return folderPath;
-    });
+    const template = getTemplate(templateName);
+
+    // get the folder paths before changing the working directory
+    const folderPaths = getFolderPaths(template);
 
     // create the app folder
     mkdirSync(appName);
@@ -41,12 +38,24 @@ export function createNodeTsApp(appName: string, template = DefaultTemplateName)
     });
 }
 
-function getCommands(template: string) {
-    const commands = Templates[template].commands || [];
+function getFolderPaths(template: Template) {
+    return (
+        template.folders?.map((folder) => {
+            const folderPath = realpathSync(`${__dirname}/../../templates/${folder}`);
+            if (!existsSync(folderPath)) {
+                throw new Error(`Folder ${folder} does not exist`);
+            }
+            return folderPath;
+        }) || []
+    );
+}
+
+function getCommands(template: Template) {
+    const commands = template.commands || [];
     return commands;
 }
 
-function getFunctions(template: string) {
-    const functions = Templates[template].customizeFunctions || [];
+function getFunctions(template: Template) {
+    const functions = template.customizeFunctions || [];
     return functions;
 }

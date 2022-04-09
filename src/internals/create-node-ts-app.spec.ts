@@ -76,6 +76,7 @@ describe(`createNodeTsApp`, () => {
         const appName = 'newAppWithTemplateWithCustomizeFunction';
         createNodeTsApp(appName, 'package-exec');
 
+        // this line has to be called after createNodeTsApp because createNodeTsApp changes the working directory where the tsconfig.json is present
         const expectedBinPath = `${readTsconfigJson().compilerOptions.outDir}/lib/exec.js`;
 
         // check that the outDir in package.json has been set correctly
