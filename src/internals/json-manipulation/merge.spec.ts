@@ -28,13 +28,3 @@ describe(`mergeJson`, () => {
         expect(result[key]).equal(valB);
     });
 });
-
-// describe(`mergeJsonFiles`, () => {
-//     it(`should merge 2 json files`, () => {
-//         const j1 = `${process.cwd()}/package.json`;
-//         const j2 = `${process.cwd()}/package-lock.json`;
-
-//         const result = mergeJsonFiles(j1, j2);
-//         expect(result).to.be.an('object');
-//     });
-// });

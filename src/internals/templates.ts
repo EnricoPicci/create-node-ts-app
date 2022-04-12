@@ -1,11 +1,11 @@
-import { setBin } from './templete-customize-functions';
+import { setBin } from './template-customize-functions';
 
 export type Template = {
     extend?: string;
     folders?: string[];
     commands?: string[];
     customizeFunctions?: ((appName: string) => void)[];
-    customizeFunctionIds?: { package: string; moduelPath: string; functionName: string };
+    customizeFunctionIds?: { module: string; functionName: string }[];
 };
 
 // exported for testing purposes only
@@ -25,8 +25,16 @@ Templates[DefaultTemplateName] = {
     commands: defaultCommands,
 };
 
-Templates['package-exec'] = {
+Templates['package'] = {
     extend: DefaultTemplateName,
+    folders: [`package-exec`],
+    customizeFunctionIds: [
+        { module: `${__dirname}/template-customize-functions`, functionName: 'setOutdirInScriptVersion' },
+    ],
+};
+
+Templates['package-exec'] = {
+    extend: `package`,
     folders: [`package-exec`],
     customizeFunctions: [setBin],
 };
@@ -44,10 +52,10 @@ export function getTemplate(name: string) {
         Object.entries(superTemplate).forEach(([key, value]) => {
             if (Array.isArray(value)) {
                 const _template = template as any;
-                if (!template as any) {
+                if (!(template as any)[key]) {
                     (template as any)[key] = [];
                 }
-                (template as any)[key] = [..._template[key], ...value];
+                (template as any)[key] = Array.from(new Set<any>([..._template[key], ...value]).values());
             }
         });
     }

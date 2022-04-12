@@ -44,16 +44,17 @@ describe(`createNodeTsApp`, () => {
         }).to.throw();
     });
 
-    it(`should create the an app using a template that defines more than one folder and the file defined in the last folder wins on the files
-    with the same name defined in previous folders`, () => {
+    it(`should create the an app using a template that extend another template. The files defined in the folder of the child template wins on the files
+    with the same name defined in the folders of the extended template`, () => {
         const tempDir = makeTempDir();
         process.chdir(tempDir);
-        const appName = 'newAppWithNonDefaultTemplate';
+        const template = 'package-exec';
+        const appName = 'newAppWithTemplateExtendingAnotherTemplate';
         const appNameLowerCase = appName.toLowerCase();
-        createNodeTsApp(appName, 'package-exec');
+        createNodeTsApp(appName, template);
 
         // check that all files have been copied from the template folder
-        const templateFiles = getFiles(`${__dirname}/../../templates/${DefaultTemplateName}`);
+        const templateFiles = getFiles(`${__dirname}/../../templates/${template}`);
         const nodeTsAppFiles = getFiles(`${tempDir}/${appName}`);
         templateFiles.forEach((file) => {
             // some more files have been created by commands like "git init" and so we can not check a one-to-one match
@@ -64,7 +65,8 @@ describe(`createNodeTsApp`, () => {
         const packageJson = readJson('package.json');
         expect(packageJson.name).equal(appNameLowerCase);
 
-        // check that the package.json file copied is the one from the last folder
+        // check that the package.json file is the one from the template extending the other template and not from the extended template
+        // the bin property is not defined in the extended template but in the child template
         expect(packageJson.bin).is.an('object');
 
         deleteTempDir(tempDir);
@@ -79,7 +81,7 @@ describe(`createNodeTsApp`, () => {
         // this line has to be called after createNodeTsApp because createNodeTsApp changes the working directory where the tsconfig.json is present
         const expectedBinPath = `${readTsconfigJson().compilerOptions.outDir}/lib/exec.js`;
 
-        // check that the outDir in package.json has been set correctly
+        // check that the bin property in package.json has been set correctly
         const packageJson = readJson('package.json');
         expect(packageJson.bin).is.an('object');
         expect(packageJson.bin.newAppWithTemplateWithCustomizeFunction).is.a('string');
@@ -108,7 +110,6 @@ function getFiles(dir: string, root?: string): string[] {
         if (statSync(path).isDirectory()) {
             return getFiles(path, _root);
         }
-        const rootIndex = path.indexOf(_root);
-        return path.slice(rootIndex + _root.length + 1);
+        return path.slice(_root.length + 1);
     });
 }

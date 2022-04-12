@@ -36,6 +36,9 @@ export function createNodeTsApp(appName: string, templateName = DefaultTemplateN
     getFunctions(template).forEach((func) => {
         func(appName);
     });
+    getFunctionIds(template).forEach(({ module, functionName }) => {
+        require(module)[functionName](appName);
+    });
 }
 
 function getFolderPaths(template: Template) {
@@ -58,4 +61,9 @@ function getCommands(template: Template) {
 function getFunctions(template: Template) {
     const functions = template.customizeFunctions || [];
     return functions;
+}
+
+function getFunctionIds(template: Template) {
+    const functionIds = template.customizeFunctionIds || [];
+    return functionIds;
 }
