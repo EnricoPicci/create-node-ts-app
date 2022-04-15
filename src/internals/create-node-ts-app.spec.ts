@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { mkdtempSync, readdirSync, rmSync, statSync } from 'fs';
+import { mkdtempSync, readdirSync, realpathSync, rmSync, statSync } from 'fs';
 import { tmpdir } from 'os';
 import { sep } from 'path';
 
@@ -44,8 +44,7 @@ describe(`createNodeTsApp`, () => {
         }).to.throw();
     });
 
-    it(`should create the an app using a template that extend another template. The files defined in the folder of the child template wins on the files
-    with the same name defined in the folders of the extended template`, () => {
+    it(`should create an app using a template that extend another template`, () => {
         const tempDir = makeTempDir();
         process.chdir(tempDir);
         const template = 'package-exec';
@@ -54,7 +53,7 @@ describe(`createNodeTsApp`, () => {
         createNodeTsApp(appName, template);
 
         // check that all files have been copied from the template folder
-        const templateFiles = getFiles(`${__dirname}/../../templates/${template}`);
+        const templateFiles = getFiles(realpathSync(`${__dirname}/../../templates/${template}`));
         const nodeTsAppFiles = getFiles(`${tempDir}/${appName}`);
         templateFiles.forEach((file) => {
             // some more files have been created by commands like "git init" and so we can not check a one-to-one match
@@ -65,8 +64,20 @@ describe(`createNodeTsApp`, () => {
         const packageJson = readJson('package.json');
         expect(packageJson.name).equal(appNameLowerCase);
 
+        deleteTempDir(tempDir);
+    }).timeout(60000);
+
+    it(`should create the an app using a template that extend another template. The files defined in the folder of the child template wins on the files
+    with the same name defined in the folders of the extended template`, () => {
+        const tempDir = makeTempDir();
+        process.chdir(tempDir);
+        const template = 'package-exec';
+        const appName = 'newAppWithTemplateExtendingAnotherTemplate';
+        createNodeTsApp(appName, template);
+
         // check that the package.json file is the one from the template extending the other template and not from the extended template
         // the bin property is not defined in the extended template but in the child template
+        const packageJson = readJson('package.json');
         expect(packageJson.bin).is.an('object');
 
         deleteTempDir(tempDir);
@@ -78,17 +89,45 @@ describe(`createNodeTsApp`, () => {
         const appName = 'newAppWithTemplateWithCustomizeFunction';
         createNodeTsApp(appName, 'package-exec');
 
-        // this line has to be called after createNodeTsApp because createNodeTsApp changes the working directory where the tsconfig.json is present
-        const expectedBinPath = `${readTsconfigJson().compilerOptions.outDir}/lib/exec.js`;
-
-        // check that the bin property in package.json has been set correctly
+        // the customizeFunction defined in the package-exec template sets the bin property in package.json using the outDir defined in tsconfig.json
+        // check that the bin property in package.json has been set correctly by the customizeFunction
         const packageJson = readJson('package.json');
-        expect(packageJson.bin).is.an('object');
-        expect(packageJson.bin.newAppWithTemplateWithCustomizeFunction).is.a('string');
-        expect(packageJson.bin.newAppWithTemplateWithCustomizeFunction).equal(expectedBinPath);
+        const expectedBinPath = `${readTsconfigJson().compilerOptions.outDir}/lib/exec.js`;
+        expect(packageJson.bin[appName]).equal(expectedBinPath);
 
         deleteTempDir(tempDir);
     }).timeout(60000);
+
+    // it.only(
+    //     `should create an app using a template that extend another template. The files in the src folder in the new app
+    //  are all and only the files defined in the src folder within the specific template folder used`,
+    //     () => {
+    //         const tempDir = makeTempDir();
+    //         process.chdir(tempDir);
+    //         const template = 'package-exec';
+    //         const appName = 'newAppWithTemplateExtendingAnotherTemplate';
+    //         const appNameLowerCase = appName.toLowerCase();
+    //         createNodeTsApp(appName, template);
+
+    //         // check that all files have been copied from the template folder
+    //         console.log('=====>>>>>>>', `${__dirname}/../../templates/${template}`);
+    //         console.log('=====>>>>>>>', `${tempDir}/${appName}`);
+
+    //         const templateFiles = getFiles(realpathSync(`${__dirname}/../../templates/${template}/src`));
+    //         const nodeTsAppFiles = getFiles(`${tempDir}/${appName}/src`);
+    //         expect(nodeTsAppFiles.length).equal(templateFiles.length);
+    //         templateFiles.forEach((file) => {
+    //             // some more files have been created by commands like "git init" and so we can not check a one-to-one match
+    //             expect(nodeTsAppFiles.includes(file)).to.be.true;
+    //         });
+
+    //         // check that the name in package.json has been set correctly
+    //         const packageJson = readJson('package.json');
+    //         expect(packageJson.name).equal(appNameLowerCase);
+
+    //         deleteTempDir(tempDir);
+    //     },
+    // ).timeout(60000);
 });
 
 function makeTempDir() {

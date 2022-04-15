@@ -27,7 +27,7 @@ Templates[DefaultTemplateName] = {
 
 Templates['package'] = {
     extend: DefaultTemplateName,
-    folders: [`package-exec`],
+    folders: [`package`],
     customizeFunctionIds: [
         { module: `${__dirname}/template-customize-functions`, functionName: 'setOutdirInScriptVersion' },
     ],
