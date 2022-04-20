@@ -1,52 +1,62 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getPackageJson = exports.createNodeTsApp = exports.DefaultTemplate = void 0;
+exports.createNodeTsApp = void 0;
 const child_process_1 = require("child_process");
 const fs_1 = require("fs");
-exports.DefaultTemplate = 'default';
-function createNodeTsApp(folder, template = exports.DefaultTemplate) {
-    const templatePath = (0, fs_1.realpathSync)(__dirname + `/../../templates/${template}`);
-    if (folder.trim() === '') {
-        throw new Error('Folder name is empty');
+const path_1 = require("path");
+const package_json_1 = require("./json-manipulation/package-json");
+const templates_1 = require("./templates");
+function createNodeTsApp(appName, templateName = templates_1.DefaultTemplateName) {
+    if (appName.trim() === '') {
+        throw new Error('App name is empty');
     }
-    if (!(0, fs_1.existsSync)(templatePath)) {
-        throw new Error(`Template ${template} does not exist`);
-    }
+    const template = (0, templates_1.getTemplate)(templateName);
+    // get the folder paths before changing the working directory
+    const folderPaths = getFolderPaths(template);
     // create the app folder
-    (0, fs_1.mkdirSync)(folder);
-    process.chdir(folder);
-    // copy the files from the template folder
-    (0, fs_1.cpSync)(`${templatePath}`, `./`, { recursive: true });
-    // create the src folder
-    (0, fs_1.mkdirSync)(`src`);
+    (0, fs_1.mkdirSync)(appName);
+    process.chdir(appName);
+    // copy the files from the template folders
+    // if the same file is defined in multiple folders, the last one wins
+    folderPaths.forEach((folderPath) => {
+        const _normalizedFolderPath = (0, path_1.normalize)(folderPath);
+        (0, fs_1.cpSync)(`${_normalizedFolderPath}`, `.${path_1.sep}`, { recursive: true });
+    });
     // run the commands
     getCommands(template).forEach((command) => {
         (0, child_process_1.execSync)(command, { stdio: 'inherit' });
     });
     // change package.json
-    const packageJsonPath = `package.json`;
-    const packageJson = getPackageJson(packageJsonPath);
-    packageJson.name = folder.toLowerCase();
-    const newPackageJsonString = JSON.stringify(packageJson, null, 2);
-    (0, fs_1.writeFileSync)(packageJsonPath, newPackageJsonString);
+    const nameJson = { name: appName.toLowerCase() };
+    (0, package_json_1.writeIntoPackageJson)(nameJson);
+    // execute the functions if defined in the template
+    getFunctions(template).forEach((func) => {
+        func(appName);
+    });
+    getFunctionIds(template).forEach(({ module, functionName }) => {
+        require(module)[functionName](appName);
+    });
 }
 exports.createNodeTsApp = createNodeTsApp;
+function getFolderPaths(template) {
+    return (template.folders?.map((folder) => {
+        const folderPath = (0, fs_1.realpathSync)(`${__dirname}/../../template-folders/${folder}`);
+        if (!(0, fs_1.existsSync)(folderPath)) {
+            throw new Error(`Folder ${folder} does not exist`);
+        }
+        return folderPath;
+    }) || []);
+}
 function getCommands(template) {
-    const commands = [];
-    switch (template) {
-        case 'default':
-            commands.push('npm i typescript ts-node mocha chai --save-dev');
-            commands.push('npm i @types/node @types/mocha @types/chai --save-dev');
-            commands.push('git init');
-            break;
-        default:
-            throw new Error(`Unknown template: ${template}`);
-    }
+    const commands = template.commands || [];
     return commands;
 }
-function getPackageJson(pacakgeJson) {
-    const packageJsonString = (0, fs_1.readFileSync)(pacakgeJson).toString();
-    return JSON.parse(packageJsonString);
+function getFunctions(template) {
+    const functions = template.customizeFunctions || [];
+    return functions;
 }
-exports.getPackageJson = getPackageJson;
+function getFunctionIds(template) {
+    const functionIds = template.customizeFunctionIds || [];
+    return functionIds;
+}
 //# sourceMappingURL=create-node-ts-app.js.map

@@ -1,0 +1,1 @@
+{"version":3,"file":"tsconfig-json.js","sourceRoot":"","sources":["../../../src/internals/json-manipulation/tsconfig-json.ts"],"names":[],"mappings":";;;AAAA,2CAAuC;AAEvC,MAAM,uBAAuB,GAAG,eAAe,CAAC;AAEhD,8BAA8B;AAC9B,SAAgB,gBAAgB;IAC5B,OAAO,IAAA,oBAAQ,EAAC,uBAAuB,CAAC,CAAC;AAC7C,CAAC;AAFD,4CAEC"}
