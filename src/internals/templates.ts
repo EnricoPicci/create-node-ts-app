@@ -1,4 +1,4 @@
-import { setBin } from './template-customize-functions';
+import { setAppNameInReadme, setBin } from './template-customize-functions';
 
 export type Template = {
     folders?: string[];
@@ -21,11 +21,13 @@ const defaultCommands = [
 
 Templates[DefaultTemplateName] = {
     folders: [`default`],
+    customizeFunctions: [setAppNameInReadme],
     commands: defaultCommands,
 };
 
 Templates['package'] = {
     folders: [`default`, `package`],
+    customizeFunctions: [setAppNameInReadme],
     customizeFunctionIds: [
         { module: `${__dirname}/template-customize-functions`, functionName: 'setOutdirInScriptVersion' },
     ],
@@ -37,7 +39,7 @@ Templates['package-exec'] = {
     customizeFunctionIds: [
         { module: `${__dirname}/template-customize-functions`, functionName: 'setOutdirInScriptVersion' },
     ],
-    customizeFunctions: [setBin],
+    customizeFunctions: [setAppNameInReadme, setBin],
     commands: defaultCommands,
 };
 

@@ -7,7 +7,7 @@ describe(`getTemplate`, () => {
         const template = getTemplate(templateName);
         expect(template.commands?.length).equal(3);
         expect(template.folders?.length).equal(3);
-        expect(template.customizeFunctions?.length).equal(1);
+        expect(template.customizeFunctions?.length).equal(2);
         expect(template.customizeFunctionIds?.length).equal(1);
     });
 });

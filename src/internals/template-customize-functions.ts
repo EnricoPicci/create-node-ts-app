@@ -1,5 +1,6 @@
 import { readTsconfigJson } from './json-manipulation/tsconfig-json';
 import { readPackageJson, writeIntoPackageJson } from './json-manipulation/package-json';
+import { readFileSync, writeFileSync } from 'fs';
 
 // Sets the bin property in package.json so that the command can be executed using npx
 export function setBin(appName: string) {
@@ -23,4 +24,12 @@ export function setOutdirInScriptVersion() {
     const scripts = packageJson.scripts;
     scripts.version = `npm run tsc && git add -A ${outDir}`;
     writeIntoPackageJson(scripts);
+}
+
+// sets the appName in readme.md
+export function setAppNameInReadme(appName: string) {
+    const readmeMdPath = `${process.cwd()}/README.md`;
+    const readmeMd = readFileSync(readmeMdPath).toString();
+    const newReadmeMd = readmeMd.replaceAll('<app-name>', appName);
+    writeFileSync(readmeMdPath, newReadmeMd);
 }
