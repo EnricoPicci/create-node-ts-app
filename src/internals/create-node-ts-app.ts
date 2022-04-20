@@ -1,10 +1,12 @@
 import { execSync } from 'child_process';
-import { cpSync, existsSync, mkdirSync, realpathSync } from 'fs';
+import { appendFileSync, cpSync, existsSync, mkdirSync, readFileSync, realpathSync, renameSync, unlinkSync } from 'fs';
 import { normalize, sep } from 'path';
+import { getFiles } from './file-manipulation/get-files';
 import { writeIntoPackageJson } from './json-manipulation/package-json';
 import { DefaultTemplateName, getTemplate, Template } from './templates';
 
-export function createNodeTsApp(appName: string, templateName = DefaultTemplateName) {
+export function createNodeTsApp(appName: string, templateName = DefaultTemplateName, verbose?: string) {
+    const _verbose = verbose?.toUpperCase() === 'Y';
     if (appName.trim() === '') {
         throw new Error('App name is empty');
     }
@@ -16,6 +18,7 @@ export function createNodeTsApp(appName: string, templateName = DefaultTemplateN
 
     // create the app folder
     mkdirSync(appName);
+    log(`Created folder ${appName}`, _verbose);
     process.chdir(appName);
 
     // copy the files from the template folders
@@ -23,11 +26,26 @@ export function createNodeTsApp(appName: string, templateName = DefaultTemplateN
     folderPaths.forEach((folderPath) => {
         const _normalizedFolderPath = normalize(folderPath);
         cpSync(`${_normalizedFolderPath}`, `.${sep}`, { recursive: true });
+        log(`Copied files from ${_normalizedFolderPath}`, _verbose);
+        log(`files copied: ${getFiles(folderPath).join(', ')}`, _verbose);
     });
+
+    const gitignoreExists = existsSync('.gitignore');
+    if (gitignoreExists) {
+        // Append if there's already a `.gitignore` file there
+        const data = readFileSync('gitignore');
+        appendFileSync('.gitignore', data);
+        unlinkSync('gitignore');
+    } else {
+        // Rename gitignore after the fact to prevent npm from renaming it to .npmignore
+        // See: https://github.com/npm/npm/issues/1862
+        renameSync('gitignore', '.gitignore');
+    }
 
     // run the commands
     getCommands(template).forEach((command) => {
         execSync(command, { stdio: 'inherit' });
+        log(`Cammand "${command}" executed`, _verbose);
     });
 
     // change package.json
@@ -37,9 +55,11 @@ export function createNodeTsApp(appName: string, templateName = DefaultTemplateN
     // execute the functions if defined in the template
     getFunctions(template).forEach((func) => {
         func(appName);
+        log(`Function "${func.name}" executed`, _verbose);
     });
     getFunctionIds(template).forEach(({ module, functionName }) => {
         require(module)[functionName](appName);
+        log(`Function "${functionName}" in module "${module}" executed`, _verbose);
     });
 }
 
@@ -68,4 +88,10 @@ function getFunctions(template: Template) {
 function getFunctionIds(template: Template) {
     const functionIds = template.customizeFunctionIds || [];
     return functionIds;
+}
+
+function log(message: string, verbose: boolean) {
+    if (verbose) {
+        console.log(message);
+    }
 }

@@ -12,9 +12,10 @@
         "tsc-version": "tsc --version",
         "lint": "eslint src/**/*.ts",
         "lint:fix": "eslint src/**/*.ts --fix",
-        "prepublishOnly": "npm version patch",
-        "preversion": "npm run test",
-        "version": "npm run tsc && git add -A dist-package",
+        "rename-.gitignore": "node ./dist-package/scripts/rename-gitignore.js",
+        "prepublishOnly": "npm run rename-.gitignore && npm version patch",
+        "preversion": "npm run test && npm run tsc",
+        "version": "git add -A dist-package",
         "postversion": "git push",
         "run-local": "npm run tsc && node dist-package/lib/create-node-ts-app.js --appName newApp"
     },

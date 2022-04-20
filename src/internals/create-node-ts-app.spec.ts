@@ -1,16 +1,16 @@
 import { expect } from 'chai';
-import { mkdtempSync, readdirSync, readFileSync, realpathSync, rmSync, statSync } from 'fs';
+import { mkdtempSync, readFileSync, rmSync } from 'fs';
 import { tmpdir } from 'os';
 import { sep } from 'path';
 
 import { createNodeTsApp } from './create-node-ts-app';
+import { getFiles } from './file-manipulation/get-files';
 import { readJson } from './json-manipulation/read-json';
 import { readTsconfigJson } from './json-manipulation/tsconfig-json';
 import { DefaultTemplateName } from './templates';
 
 describe(`createNodeTsApp`, () => {
     it(`should create the app folder and copy the files from the default template`, () => {
-        console.log(realpathSync(`${__dirname}/../../template-folders/${DefaultTemplateName}`));
         const tempDir = makeTempDir();
         process.chdir(tempDir);
         const appName = 'newApp';
@@ -119,15 +119,4 @@ function makeTempDir() {
 function deleteTempDir(tempDir: string) {
     rmSync(tempDir, { recursive: true, force: true });
     console.log('>>>>>>>> tempDir deleted', tempDir);
-}
-
-function getFiles(dir: string): string[] {
-    const _root = dir;
-    return readdirSync(realpathSync(dir)).flatMap((item) => {
-        const path = `${dir}${sep}${item}`;
-        if (statSync(path).isDirectory()) {
-            return getFiles(path);
-        }
-        return path.slice(_root.length + 1);
-    });
 }
