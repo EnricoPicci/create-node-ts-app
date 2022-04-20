@@ -46,7 +46,7 @@ export function createNodeTsApp(appName: string, templateName = DefaultTemplateN
 function getFolderPaths(template: Template) {
     return (
         template.folders?.map((folder) => {
-            const folderPath = realpathSync(`${__dirname}/../../templates/${folder}`);
+            const folderPath = realpathSync(`${__dirname}/../../template-folders/${folder}`);
             if (!existsSync(folderPath)) {
                 throw new Error(`Folder ${folder} does not exist`);
             }

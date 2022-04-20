@@ -10,7 +10,7 @@ import { DefaultTemplateName } from './templates';
 
 describe(`createNodeTsApp`, () => {
     it(`should create the app folder and copy the files from the default template`, () => {
-        console.log(realpathSync(`${__dirname}/../../templates/${DefaultTemplateName}`));
+        console.log(realpathSync(`${__dirname}/../../template-folders/${DefaultTemplateName}`));
         const tempDir = makeTempDir();
         process.chdir(tempDir);
         const appName = 'newApp';
@@ -18,7 +18,7 @@ describe(`createNodeTsApp`, () => {
         createNodeTsApp(appName);
 
         // check that all files have been copied from the template folder
-        const templateFiles = getFiles(`${__dirname}/../../templates/${DefaultTemplateName}`);
+        const templateFiles = getFiles(`${__dirname}/../../template-folders/${DefaultTemplateName}`);
         const nodeTsAppFiles = getFiles(`${tempDir}/${appName}`);
         templateFiles.forEach((file) => {
             // some more files have been created by commands like "git init" and so we can not check a one-to-one match
@@ -54,7 +54,7 @@ describe(`createNodeTsApp`, () => {
         createNodeTsApp(appName, template);
 
         // check that all files have been copied from the template folder
-        const templateFiles = getFiles(`${__dirname}/../../templates/${template}`);
+        const templateFiles = getFiles(`${__dirname}/../../template-folders/${template}`);
         const nodeTsAppFiles = getFiles(`${tempDir}/${appName}`);
         templateFiles.forEach((file) => {
             // some more files have been created by commands like "git init" and so we can not check a one-to-one match
