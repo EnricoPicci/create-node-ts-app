@@ -18,12 +18,22 @@ describe(`createNodeTsApp`, () => {
         createNodeTsApp(appName);
 
         // check that all files have been copied from the template folder
-        const templateFiles = getFiles(`${__dirname}/../../template-folders/${DefaultTemplateName}`);
+        // gitignore is excluded because it is copied to .gitignore during the copy process
+        const templateFiles = getFiles(`${__dirname}/../../template-folders/${DefaultTemplateName}`).filter(
+            (file) => file !== 'gitignore',
+        );
         const nodeTsAppFiles = getFiles(`${tempDir}/${appName}`);
         templateFiles.forEach((file) => {
             // some more files have been created by commands like "git init" and so we can not check a one-to-one match
+            const fileIncluded = nodeTsAppFiles.includes(file);
+            if (!fileIncluded) {
+                console.error(`File ${file} not found in the app folder`);
+            }
             expect(nodeTsAppFiles.includes(file)).to.be.true;
         });
+
+        // check that .gitignore is present
+        expect(nodeTsAppFiles.includes('.gitignore')).to.be.true;
 
         // check that the name in package.json has been set correctly
         const packageJson = readJson('package.json');
