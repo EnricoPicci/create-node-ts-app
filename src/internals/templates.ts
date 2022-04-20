@@ -1,7 +1,6 @@
 import { setBin } from './template-customize-functions';
 
 export type Template = {
-    extend?: string;
     folders?: string[];
     commands?: string[];
     customizeFunctions?: ((appName: string) => void)[];
@@ -26,38 +25,23 @@ Templates[DefaultTemplateName] = {
 };
 
 Templates['package'] = {
-    extend: DefaultTemplateName,
-    folders: [`package`],
+    folders: [`default`, `package`],
     customizeFunctionIds: [
         { module: `${__dirname}/template-customize-functions`, functionName: 'setOutdirInScriptVersion' },
     ],
+    commands: defaultCommands,
 };
 
 Templates['package-exec'] = {
-    extend: `package`,
-    folders: [`package-exec`],
+    folders: [`default`, `package`, `package-exec`],
+    customizeFunctionIds: [
+        { module: `${__dirname}/template-customize-functions`, functionName: 'setOutdirInScriptVersion' },
+    ],
     customizeFunctions: [setBin],
+    commands: defaultCommands,
 };
 
 export function getTemplate(name: string) {
     let template = Templates[name];
-    if (template.extend) {
-        const superTemplate = getTemplate(template.extend);
-        // first merge the templates, with template overriding superTemplate
-        template = {
-            ...superTemplate,
-            ...template,
-        };
-        // then merge the arrays adding to the template arrays the values from the equvalent array in the superTemplate
-        Object.entries(superTemplate).forEach(([key, value]) => {
-            if (Array.isArray(value)) {
-                const _template = template as any;
-                if (!(template as any)[key]) {
-                    (template as any)[key] = [];
-                }
-                (template as any)[key] = Array.from(new Set<any>([..._template[key], ...value]).values());
-            }
-        });
-    }
     return template;
 }
