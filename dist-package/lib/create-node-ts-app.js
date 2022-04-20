@@ -8,8 +8,9 @@ const program = new commander_1.Command();
 program
     .description('A command to create e new Node app which uses TypeScript')
     .requiredOption('-a, --appName <string>', `Name of the app to be created (e.g. 'my-app')`)
-    .option('-t, --template <string>', `the template to use, defualt is ${templates_1.DefaultTemplateName}`, templates_1.DefaultTemplateName);
+    .option('-t, --template <string>', `the template to use, defualt is ${templates_1.DefaultTemplateName}`, templates_1.DefaultTemplateName)
+    .option('-v, --verbose <string>', `verbose, defualt is N`, 'N');
 program.parse(process.argv);
 const _options = program.opts();
-(0, create_node_ts_app_1.createNodeTsApp)(_options.appName, _options.template);
+(0, create_node_ts_app_1.createNodeTsApp)(_options.appName, _options.template, _options.verbose);
 //# sourceMappingURL=create-node-ts-app.js.map

@@ -5,20 +5,20 @@ const fs_1 = require("fs");
 const os_1 = require("os");
 const path_1 = require("path");
 const create_node_ts_app_1 = require("./create-node-ts-app");
+const get_files_1 = require("./file-manipulation/get-files");
 const read_json_1 = require("./json-manipulation/read-json");
 const tsconfig_json_1 = require("./json-manipulation/tsconfig-json");
 const templates_1 = require("./templates");
 describe(`createNodeTsApp`, () => {
     it(`should create the app folder and copy the files from the default template`, () => {
-        console.log((0, fs_1.realpathSync)(`${__dirname}/../../template-folders/${templates_1.DefaultTemplateName}`));
         const tempDir = makeTempDir();
         process.chdir(tempDir);
         const appName = 'newApp';
         const appNameLowerCase = 'newapp';
         (0, create_node_ts_app_1.createNodeTsApp)(appName);
         // check that all files have been copied from the template folder
-        const templateFiles = getFiles(`${__dirname}/../../template-folders/${templates_1.DefaultTemplateName}`);
-        const nodeTsAppFiles = getFiles(`${tempDir}/${appName}`);
+        const templateFiles = (0, get_files_1.getFiles)(`${__dirname}/../../template-folders/${templates_1.DefaultTemplateName}`);
+        const nodeTsAppFiles = (0, get_files_1.getFiles)(`${tempDir}/${appName}`);
         templateFiles.forEach((file) => {
             // some more files have been created by commands like "git init" and so we can not check a one-to-one match
             (0, chai_1.expect)(nodeTsAppFiles.includes(file)).to.be.true;
@@ -53,8 +53,8 @@ describe(`createNodeTsApp`, () => {
         const appNameLowerCase = appName.toLowerCase();
         (0, create_node_ts_app_1.createNodeTsApp)(appName, template);
         // check that all files have been copied from the template folder
-        const templateFiles = getFiles(`${__dirname}/../../template-folders/${template}`);
-        const nodeTsAppFiles = getFiles(`${tempDir}/${appName}`);
+        const templateFiles = (0, get_files_1.getFiles)(`${__dirname}/../../template-folders/${template}`);
+        const nodeTsAppFiles = (0, get_files_1.getFiles)(`${tempDir}/${appName}`);
         templateFiles.forEach((file) => {
             // some more files have been created by commands like "git init" and so we can not check a one-to-one match
             (0, chai_1.expect)(nodeTsAppFiles.includes(file)).to.be.true;
@@ -100,15 +100,5 @@ function makeTempDir() {
 function deleteTempDir(tempDir) {
     (0, fs_1.rmSync)(tempDir, { recursive: true, force: true });
     console.log('>>>>>>>> tempDir deleted', tempDir);
-}
-function getFiles(dir) {
-    const _root = dir;
-    return (0, fs_1.readdirSync)((0, fs_1.realpathSync)(dir)).flatMap((item) => {
-        const path = `${dir}${path_1.sep}${item}`;
-        if ((0, fs_1.statSync)(path).isDirectory()) {
-            return getFiles(path);
-        }
-        return path.slice(_root.length + 1);
-    });
 }
 //# sourceMappingURL=create-node-ts-app.spec.js.map
