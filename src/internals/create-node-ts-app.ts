@@ -1,5 +1,6 @@
 import { execSync } from 'child_process';
 import { cpSync, existsSync, mkdirSync, realpathSync } from 'fs';
+import { normalize, sep } from 'path';
 import { writeIntoPackageJson } from './json-manipulation/package-json';
 import { DefaultTemplateName, getTemplate, Template } from './templates';
 
@@ -20,7 +21,8 @@ export function createNodeTsApp(appName: string, templateName = DefaultTemplateN
     // copy the files from the template folders
     // if the same file is defined in multiple folders, the last one wins
     folderPaths.forEach((folderPath) => {
-        cpSync(`${folderPath}`, `./`, { recursive: true });
+        const _normalizedFolderPath = normalize(folderPath);
+        cpSync(`${_normalizedFolderPath}`, `.${sep}`, { recursive: true });
     });
 
     // run the commands

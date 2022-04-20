@@ -10,6 +10,7 @@ import { DefaultTemplateName } from './templates';
 
 describe(`createNodeTsApp`, () => {
     it(`should create the app folder and copy the files from the default template`, () => {
+        console.log(realpathSync(`${__dirname}/../../templates/${DefaultTemplateName}`));
         const tempDir = makeTempDir();
         process.chdir(tempDir);
         const appName = 'newApp';
@@ -53,7 +54,7 @@ describe(`createNodeTsApp`, () => {
         createNodeTsApp(appName, template);
 
         // check that all files have been copied from the template folder
-        const templateFiles = getFiles(realpathSync(`${__dirname}/../../templates/${template}`));
+        const templateFiles = getFiles(`${__dirname}/../../templates/${template}`);
         const nodeTsAppFiles = getFiles(`${tempDir}/${appName}`);
         templateFiles.forEach((file) => {
             // some more files have been created by commands like "git init" and so we can not check a one-to-one match
@@ -97,37 +98,6 @@ describe(`createNodeTsApp`, () => {
 
         deleteTempDir(tempDir);
     }).timeout(60000);
-
-    // it.only(
-    //     `should create an app using a template that extend another template. The files in the src folder in the new app
-    //  are all and only the files defined in the src folder within the specific template folder used`,
-    //     () => {
-    //         const tempDir = makeTempDir();
-    //         process.chdir(tempDir);
-    //         const template = 'package-exec';
-    //         const appName = 'newAppWithTemplateExtendingAnotherTemplate';
-    //         const appNameLowerCase = appName.toLowerCase();
-    //         createNodeTsApp(appName, template);
-
-    //         // check that all files have been copied from the template folder
-    //         console.log('=====>>>>>>>', `${__dirname}/../../templates/${template}`);
-    //         console.log('=====>>>>>>>', `${tempDir}/${appName}`);
-
-    //         const templateFiles = getFiles(realpathSync(`${__dirname}/../../templates/${template}/src`));
-    //         const nodeTsAppFiles = getFiles(`${tempDir}/${appName}/src`);
-    //         expect(nodeTsAppFiles.length).equal(templateFiles.length);
-    //         templateFiles.forEach((file) => {
-    //             // some more files have been created by commands like "git init" and so we can not check a one-to-one match
-    //             expect(nodeTsAppFiles.includes(file)).to.be.true;
-    //         });
-
-    //         // check that the name in package.json has been set correctly
-    //         const packageJson = readJson('package.json');
-    //         expect(packageJson.name).equal(appNameLowerCase);
-
-    //         deleteTempDir(tempDir);
-    //     },
-    // ).timeout(60000);
 });
 
 function makeTempDir() {
@@ -142,12 +112,12 @@ function deleteTempDir(tempDir: string) {
     console.log('>>>>>>>> tempDir deleted', tempDir);
 }
 
-function getFiles(dir: string, root?: string): string[] {
-    const _root = root || dir;
-    return readdirSync(dir).flatMap((item) => {
-        const path = `${dir}/${item}`;
+function getFiles(dir: string): string[] {
+    const _root = dir;
+    return readdirSync(realpathSync(dir)).flatMap((item) => {
+        const path = `${dir}${sep}${item}`;
         if (statSync(path).isDirectory()) {
-            return getFiles(path, _root);
+            return getFiles(path);
         }
         return path.slice(_root.length + 1);
     });
