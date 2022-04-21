@@ -21,6 +21,8 @@ It is possible to specify a template to be used to create the app.
 
 ### **default** template
 
+npx --yes @enrico.piccinin/create-node-ts-app -a <app-name>
+
 Scaffolds a simple Node app configured to use Typescript.
 
 Provides a configuration for `eslint` and `prettier`.
@@ -31,6 +33,8 @@ Creates an `src` folder with an `hallo.ts` and its test `hallo.spec.ts`.
 
 ## The **package** template
 
+npx --yes @enrico.piccinin/create-node-ts-app -a <app-name> -t package
+
 Scaffolds a Node app that can be published as a package on the public NPM registry.
 
 Provides a configuration for `eslint` and `prettier`.
@@ -40,6 +44,8 @@ Testing is based on the `mocha` and `chai` libraries.
 Creates an `src` folder with a `package-core.ts` file containing a sample of a function which is exported by the package via the `index.ts` file.
 
 ### The **package-exec** template
+
+npx --yes @enrico.piccinin/create-node-ts-app -a <app-name> -t package-exec
 
 Scafolds a Node app that can be deployed on the public NPM registry and used as a command via `npx`.
 

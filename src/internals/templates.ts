@@ -20,13 +20,13 @@ const defaultCommands = [
 ];
 
 Templates[DefaultTemplateName] = {
-    folders: [`default`],
+    folders: ['base', 'sample-code'],
     customizeFunctions: [setAppNameInReadme],
     commands: defaultCommands,
 };
 
 Templates['package'] = {
-    folders: [`default`, `package`],
+    folders: ['base', `package`],
     customizeFunctions: [setAppNameInReadme],
     customizeFunctionIds: [
         { module: `${__dirname}/template-customize-functions`, functionName: 'setOutdirInScriptVersion' },
@@ -35,7 +35,7 @@ Templates['package'] = {
 };
 
 Templates['package-exec'] = {
-    folders: [`default`, `package`, `package-exec`],
+    folders: ['base', `package`, `package-exec`],
     customizeFunctionIds: [
         { module: `${__dirname}/template-customize-functions`, functionName: 'setOutdirInScriptVersion' },
     ],

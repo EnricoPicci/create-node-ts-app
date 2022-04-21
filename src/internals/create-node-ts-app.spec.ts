@@ -7,7 +7,6 @@ import { createNodeTsApp } from './create-node-ts-app';
 import { getFiles } from './file-manipulation/get-files';
 import { readJson } from './json-manipulation/read-json';
 import { readTsconfigJson } from './json-manipulation/tsconfig-json';
-import { DefaultTemplateName } from './templates';
 
 describe(`createNodeTsApp`, () => {
     it(`should create the app folder and copy the files from the default template`, () => {
@@ -17,11 +16,12 @@ describe(`createNodeTsApp`, () => {
         const appNameLowerCase = 'newapp';
         createNodeTsApp(appName);
 
-        // check that all files have been copied from the template folder
+        // check that all files have been copied from the template folders
         // gitignore is excluded because it is copied to .gitignore during the copy process
-        const templateFiles = getFiles(`${__dirname}/../../template-folders/${DefaultTemplateName}`).filter(
-            (file) => file !== 'gitignore',
-        );
+        const templateFiles = [
+            ...getFiles(`${__dirname}/../../template-folders/base`).filter((file) => file !== 'gitignore'),
+            ...getFiles(`${__dirname}/../../template-folders/sample-code`),
+        ];
         const nodeTsAppFiles = getFiles(`${tempDir}/${appName}`);
         templateFiles.forEach((file) => {
             // some more files have been created by commands like "git init" and so we can not check a one-to-one match
