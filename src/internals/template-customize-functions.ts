@@ -27,6 +27,7 @@ export function setOutdirInScriptVersion() {
 }
 
 // sets the appName in readme.md
+// it is defined as a customize function since not all templates may need it - a template which doed not have a readme.md file does not need it
 export function setAppNameInReadme(appName: string) {
     const readmeMdPath = `${process.cwd()}/README.md`;
     const readmeMd = readFileSync(readmeMdPath).toString();

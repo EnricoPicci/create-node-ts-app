@@ -58,3 +58,14 @@ Creates an `src` folder with the following structure:
 -   `lib` folder containing the command
 -   `core` folder containing `exec-command.ts` which implements the logic to execute the command
 -   `core/internals` folder containing the internals of the logic of the command
+
+## The template mechanism
+
+A Template is an Object that defines how to scaffold a project.
+
+A Template has the following properties:
+
+-   **folders**. This is an array of names of folders which have to be copied to the target project folder. The "to be copied" folder names must be names of folders contained in the "template-folders" folder of this project.
+-   **commands**. An array of strings representing the commands that have to be created after the project folder has been created. The commands are exectued from within the project folder. Examples of such commands and "npm i ..." to load dependencies or "git init" to initialize a git repo.
+-   **customizeFunctions**. An array of functions which are executed from within the project folder. Such functions receive the app name as parameter.
+-   **customizeFunctionIds**. An array of Objects of type FunctionId (i.e. of type {module: string; functionName: string}). Each FunctionId identifies a function which is loaded and executed from within the project folder. Such functions receive the app name as parameter.
