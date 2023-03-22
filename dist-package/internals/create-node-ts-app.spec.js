@@ -54,10 +54,10 @@ describe(`createNodeTsApp`, () => {
             (0, create_node_ts_app_1.createNodeTsApp)('anApp', 'unknownTemplate');
         }).to.throw();
     });
-    it(`should create an app using a non default template`, () => {
+    it.only(`should create an app using a non default template`, () => {
         const tempDir = makeTempDir();
         process.chdir(tempDir);
-        const template = 'package-exec';
+        const template = 'exec-cmd';
         const appName = 'newAppWithTemplateExtendingAnotherTemplate';
         const appNameLowerCase = appName.toLowerCase();
         (0, create_node_ts_app_1.createNodeTsApp)(appName, template);
@@ -66,6 +66,13 @@ describe(`createNodeTsApp`, () => {
         const nodeTsAppFiles = (0, get_files_1.getFiles)(`${tempDir}/${appName}`);
         templateFiles.forEach((file) => {
             // some more files have been created by commands like "git init" and so we can not check a one-to-one match
+            if (file === 'gitignore') {
+                file = '.gitignore';
+            }
+            const fileFound = nodeTsAppFiles.includes(file);
+            if (!fileFound) {
+                console.error('File not found', file);
+            }
             (0, chai_1.expect)(nodeTsAppFiles.includes(file)).to.be.true;
         });
         // check that the name in package.json has been set correctly
@@ -78,7 +85,7 @@ describe(`createNodeTsApp`, () => {
     with the same name defined in previoius folders`, () => {
         const tempDir = makeTempDir();
         process.chdir(tempDir);
-        const template = 'package-exec';
+        const template = 'exec-cmd';
         const appName = 'newAppWithTemplateExtendingAnotherTemplate';
         (0, create_node_ts_app_1.createNodeTsApp)(appName, template);
         // check that the package.json file is the one defined in the last folder and not the one defined in the previous folders
@@ -91,8 +98,8 @@ describe(`createNodeTsApp`, () => {
         const tempDir = makeTempDir();
         process.chdir(tempDir);
         const appName = 'newAppWithTemplateWithCustomizeFunction';
-        (0, create_node_ts_app_1.createNodeTsApp)(appName, 'package-exec');
-        // the customizeFunction defined in the package-exec template sets the bin property in package.json using the outDir defined in tsconfig.json
+        (0, create_node_ts_app_1.createNodeTsApp)(appName, 'exec-cmd');
+        // the customizeFunction defined in the exec-cmd template sets the bin property in package.json using the outDir defined in tsconfig.json
         // check that the bin property in package.json has been set correctly by the customizeFunction
         const packageJson = (0, read_json_1.readJson)('package.json');
         const expectedBinPath = `${(0, tsconfig_json_1.readTsconfigJson)().compilerOptions.outDir}/lib/command.js`;

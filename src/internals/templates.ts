@@ -41,8 +41,8 @@ Templates['package'] = {
     commands: defaultCommands,
 };
 
-Templates['package-exec'] = {
-    folders: ['base', `package`, `package-exec`],
+Templates['exec-cmd'] = {
+    folders: ['base', `exec-cmd`],
     customizeFunctionIds: [
         { module: `${__dirname}/template-customize-functions`, functionName: 'setOutdirInScriptVersion' },
     ],

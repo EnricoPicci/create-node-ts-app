@@ -44,9 +44,9 @@ Testing is based on the `mocha` and `chai` libraries.
 
 Creates an `src` folder with a `package-core.ts` file containing a sample of a function which is exported by the package via the `index.ts` file.
 
-### The **package-exec** template
+### The **exec-cmd** template
 
-`npx --yes @enrico.piccinin/create-node-ts-app -a <app-name> -t package-exec`
+`npx --yes @enrico.piccinin/create-node-ts-app -a <app-name> -t exec-cmd`
 
 Scafolds a Node app that can be deployed on the public NPM registry and used as a command via `npx`.
 

@@ -16,7 +16,8 @@
         "preversion": "npm run test && npm run tsc",
         "version": "git add -A dist-package",
         "postversion": "git push",
-        "run-local": "npm run tsc && node dist-package/lib/create-node-ts-app.js --appName newApp"
+        "run-local": "npm run tsc && node dist-package/lib/create-node-ts-app.js --appName newApp",
+        "run-local-command": "npm run tsc && node dist-package/lib/create-node-ts-app.js --appName newCmd  -t exec-cmd"
     },
     "repository": {
         "type": "git",
@@ -24,7 +25,7 @@
     },
     "keywords": [],
     "author": "",
-    "license": "ISC",
+    "license": "MIT",
     "bugs": {
         "url": "https://github.com/EnricoPicci/create-node-ts-app/issues"
     },

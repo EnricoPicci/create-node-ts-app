@@ -17,15 +17,18 @@ function setBin(appName) {
     (0, package_json_1.writeIntoPackageJson)(binJson);
 }
 exports.setBin = setBin;
-// sets the outdir, as specified in tsconfig.json, in the "vesrion" script in package.json
+// sets the outdir, as specified in tsconfig.json, in the scripts in package.json
 // so that the compiled javascript code is added to git
 function setOutdirInScriptVersion() {
     const tsconfigJson = (0, tsconfig_json_1.readTsconfigJson)();
     const outDir = tsconfigJson.compilerOptions.outDir;
     const packageJson = (0, package_json_1.readPackageJson)();
     const scripts = packageJson.scripts;
+    // set the tsc script
+    scripts.tsc = `tsc --outDir ${outDir}`;
+    // set the version script
     scripts.version = `npm run tsc && git add -A ${outDir}`;
-    (0, package_json_1.writeIntoPackageJson)(scripts);
+    (0, package_json_1.writeIntoPackageJson)(packageJson);
 }
 exports.setOutdirInScriptVersion = setOutdirInScriptVersion;
 // sets the appName in readme.md
