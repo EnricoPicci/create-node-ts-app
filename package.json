@@ -1,6 +1,6 @@
 {
     "name": "@enrico.piccinin/create-node-ts-app",
-    "version": "1.1.4",
+    "version": "1.1.5",
     "description": "Creates a node app which uses Typescript",
     "main": "index.js",
     "bin": {
