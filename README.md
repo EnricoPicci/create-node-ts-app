@@ -44,6 +44,8 @@ Testing is based on the `mocha` and `chai` libraries.
 
 Creates an `src` folder with a `package-core.ts` file containing a sample of a function which is exported by the package via the `index.ts` file.
 
+Make sure that `"declaration": true` is specified in the `tsconfig.json` file.
+
 ### The **exec-cmd** template
 
 `npx --yes @enrico.piccinin/create-node-ts-app -a <app-name> -t exec-cmd`
