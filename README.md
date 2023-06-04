@@ -60,6 +60,14 @@ Creates an `src` folder with the following structure:
 -   `core` folder containing `exec-command.ts` which implements the logic to execute the command
 -   `core/internals` folder containing the internals of the logic of the command
 
+## Notes for publishing
+
+Make sure that:
+
+-   the dist folder is removed from the .gitignore file
+-   if the package name is scoped (e.g. @myorg/my-package) then the name of the package is specified in the package.json file like this: `"name": "@myorg/my-package",`
+-   if the package is scoped you publish it with the command `npm publish --access=public`
+
 ## The template mechanism
 
 A Template is an Object that defines how to scaffold a project.
