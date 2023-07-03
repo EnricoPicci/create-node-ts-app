@@ -54,7 +54,7 @@ describe(`createNodeTsApp`, () => {
             (0, create_node_ts_app_1.createNodeTsApp)('anApp', 'unknownTemplate');
         }).to.throw();
     });
-    it.only(`should create an app using a non default template`, () => {
+    it(`should create an app using a non default template`, () => {
         const tempDir = makeTempDir();
         process.chdir(tempDir);
         const template = 'exec-cmd';
@@ -80,7 +80,7 @@ describe(`createNodeTsApp`, () => {
         (0, chai_1.expect)(packageJson.name).equal(appNameLowerCase);
         deleteTempDir(tempDir);
     }).timeout(60000);
-    it(`should create the an app using a template which specifies more than one folder in the "foders" property. 
+    it(`should create the an app using a template which specifies more than one folder in the "folders" property. 
     The files defined last folder (the last folder in the array passed to the "folders" property) wins on the files
     with the same name defined in previoius folders`, () => {
         const tempDir = makeTempDir();
@@ -92,6 +92,21 @@ describe(`createNodeTsApp`, () => {
         // the bin property is defined only in  the last folder and therefore we check that it is an object
         const packageJson = (0, read_json_1.readJson)('package.json');
         (0, chai_1.expect)(packageJson.bin).is.an('object');
+        deleteTempDir(tempDir);
+    }).timeout(60000);
+    it(`should create the an app using the package template`, () => {
+        const tempDir = makeTempDir();
+        process.chdir(tempDir);
+        const template = 'package';
+        const appName = 'newPackageApp';
+        (0, create_node_ts_app_1.createNodeTsApp)(appName, template);
+        // check that the package.json contains the expected "main" and "types" properties
+        const packageJson = (0, read_json_1.readJson)('package.json');
+        (0, chai_1.expect)(packageJson.main).equals('dist/index.js');
+        (0, chai_1.expect)(packageJson.types).equals('dist/index.d.ts');
+        // check that the tsconfig.json contains the expected "declaration" property
+        const tsconfigJson = (0, tsconfig_json_1.readTsconfigJson)();
+        (0, chai_1.expect)(tsconfigJson.compilerOptions.declaration).equals(true);
         deleteTempDir(tempDir);
     }).timeout(60000);
     it(`should create the an app using a template that defines one customizeFunction that sets the bin property in package.json`, () => {
