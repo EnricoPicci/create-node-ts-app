@@ -63,7 +63,7 @@ describe(`createNodeTsApp`, () => {
         }).to.throw();
     });
 
-    it.only(`should create an app using a non default template`, () => {
+    it(`should create an app using a non default template`, () => {
         const tempDir = makeTempDir();
         process.chdir(tempDir);
         const template = 'exec-cmd';
@@ -93,7 +93,7 @@ describe(`createNodeTsApp`, () => {
         deleteTempDir(tempDir);
     }).timeout(60000);
 
-    it(`should create the an app using a template which specifies more than one folder in the "foders" property. 
+    it(`should create the an app using a template which specifies more than one folder in the "folders" property. 
     The files defined last folder (the last folder in the array passed to the "folders" property) wins on the files
     with the same name defined in previoius folders`, () => {
         const tempDir = makeTempDir();
@@ -106,6 +106,25 @@ describe(`createNodeTsApp`, () => {
         // the bin property is defined only in  the last folder and therefore we check that it is an object
         const packageJson = readJson('package.json');
         expect(packageJson.bin).is.an('object');
+
+        deleteTempDir(tempDir);
+    }).timeout(60000);
+
+    it(`should create the an app using the package template`, () => {
+        const tempDir = makeTempDir();
+        process.chdir(tempDir);
+        const template = 'package';
+        const appName = 'newPackageApp';
+        createNodeTsApp(appName, template);
+
+        // check that the package.json contains the expected "main" and "types" properties
+        const packageJson = readJson('package.json');
+        expect(packageJson.main).equals('dist/index.js');
+        expect(packageJson.types).equals('dist/index.d.ts');
+
+        // check that the tsconfig.json contains the expected "declaration" property
+        const tsconfigJson = readTsconfigJson();
+        expect(tsconfigJson.compilerOptions.declaration).equals(true);
 
         deleteTempDir(tempDir);
     }).timeout(60000);
