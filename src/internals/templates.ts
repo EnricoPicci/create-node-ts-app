@@ -21,8 +21,8 @@ const Templates: { [key: string]: Template } = {};
 
 const defaultCommands = [
     // run these commands to make sure we load the newest available version of the various dependencies
-    'npm i typescript ts-node mocha chai --save-dev',
-    'npm i @types/node @types/mocha @types/chai --save-dev',
+    'npm i typescript ts-node mocha chai@^4.3.6 --save-dev',
+    'npm i @types/node @types/mocha @types/chai@^4.3.0 --save-dev',
     'git init',
 ];
 

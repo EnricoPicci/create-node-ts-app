@@ -12,13 +12,3 @@ cp $startDir/.prettierrc.js .prettierrc.js
 cp $startDir/tsconfig_common_config.json tsconfig_common_config.json
 cp $startDir/tsconfig.eslint.json tsconfig.eslint.json
 
-# npm init -y
-
-# npm i typescript ts-node mocha chai --save-dev
-
-# npm i @types/node @types/mocha @types/chai --save-dev
-
-# no since we copy tsconfig.json from the template
-# NO NO NO npx tsc --init
-
-# git init
