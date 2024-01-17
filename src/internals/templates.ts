@@ -21,6 +21,9 @@ const Templates: { [key: string]: Template } = {};
 
 const defaultCommands = [
     // run these commands to make sure we load the newest available version of the various dependencies
+    // however we need to have chai at version 4.3.6 because the version 5.0.0 is ESM only and this
+    // makes it incompatible with mocha and ts-node
+    // https://github.com/mochajs/mocha/issues/5073
     'npm i typescript ts-node mocha chai@^4.3.6 --save-dev',
     'npm i @types/node @types/mocha @types/chai@^4.3.0 --save-dev',
     'git init',

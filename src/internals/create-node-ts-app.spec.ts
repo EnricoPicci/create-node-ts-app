@@ -129,6 +129,22 @@ describe(`createNodeTsApp`, () => {
         deleteTempDir(tempDir);
     }).timeout(60000);
 
+    it(`should create the an app using the default template`, () => {
+        const tempDir = makeTempDir();
+        process.chdir(tempDir);
+        const template = undefined;
+        const appName = 'newDefaultApp';
+        createNodeTsApp(appName, template);
+
+        // check that the package.json contains the chai dependency at the expected version
+        // https://github.com/mochajs/mocha/issues/5073
+        const packageJson = readJson('package.json');
+        'ddd'.startsWith;
+        expect(packageJson.devDependencies['chai'].startsWith('^4.')).to.be.true;
+
+        deleteTempDir(tempDir);
+    }).timeout(60000);
+
     it(`should create the an app using a template that defines one customizeFunction that sets the bin property in package.json`, () => {
         const tempDir = makeTempDir();
         process.chdir(tempDir);

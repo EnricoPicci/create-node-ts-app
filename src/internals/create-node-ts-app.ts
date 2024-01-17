@@ -43,7 +43,8 @@ export function createNodeTsApp(appName: string, templateName = DefaultTemplateN
     }
 
     // run the commands
-    getCommands(template).forEach((command) => {
+    const commands = getCommands(template);
+    commands.forEach((command) => {
         execSync(command, { stdio: 'inherit' });
         log(`Cammand "${command}" executed`, _verbose);
     });
