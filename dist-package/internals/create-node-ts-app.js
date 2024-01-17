@@ -40,7 +40,8 @@ function createNodeTsApp(appName, templateName = templates_1.DefaultTemplateName
         (0, fs_1.renameSync)('gitignore', '.gitignore');
     }
     // run the commands
-    getCommands(template).forEach((command) => {
+    const commands = getCommands(template);
+    commands.forEach((command) => {
         (0, child_process_1.execSync)(command, { stdio: 'inherit' });
         log(`Cammand "${command}" executed`, _verbose);
     });
